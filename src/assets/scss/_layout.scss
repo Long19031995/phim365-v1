@@ -1,0 +1,70 @@
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.h100 {
+  height: 100%;
+}
+
+$sizes: 0, 4, 8, 12, 16, 20, 24, 28, 32;
+
+@each $size in $sizes {
+  // padding
+  .p#{$size} {
+    padding: #{$size}px;
+  }
+  .pt#{$size} {
+    padding-top: #{$size}px;
+  }
+  .pr#{$size} {
+    padding-right: #{$size}px;
+  }
+  .pb#{$size} {
+    padding-bottom: #{$size}px;
+  }
+  .brl#{$size} {
+    margin-left: #{$size}px;
+  }
+
+  // margin
+  .m#{$size} {
+    margin: #{$size}px;
+  }
+  .mt#{$size} {
+    margin-top: #{$size}px;
+  }
+  .mr#{$size} {
+    margin-right: #{$size}px;
+  }
+  .mb#{$size} {
+    margin-bottom: #{$size}px;
+  }
+  .ml#{$size} {
+    margin-left: #{$size}px;
+  }
+
+  // border-radius
+  .br#{$size} {
+    border-radius: #{$size}px;
+  }
+}
