@@ -15,6 +15,25 @@ export default {
 <style lang="scss">
 @import url(https://fonts.googleapis.com/css?lang=en&family=Roboto:400,700);
 
+* {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #e8edf0;
+    border-radius: 3px;
+  }
+}
+
+#app {
+  overflow-x: hidden;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -22,10 +41,5 @@ body {
 
 body * {
   font-family: 'Roboto', arial, sans-serif;
-}
-
-#app {
-  width: 100vw;
-  height: 100vh;
 }
 </style>

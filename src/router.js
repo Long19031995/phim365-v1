@@ -1,4 +1,5 @@
 import Home from './components/Home.vue'
+import Detail from './components/Detail.vue'
 
 import VueRouter from 'vue-router'
 
@@ -10,8 +11,14 @@ export default new VueRouter({
       redirect: '/home'
     },
     {
+      name: 'home',
       path: '/home',
       component: Home
+    },
+    {
+      name: 'detail',
+      path: '/detail/:id',
+      component: Detail
     }
   ]
 })

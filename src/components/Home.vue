@@ -1,6 +1,6 @@
 <template>
-  <div class="home w100 h100">
-    <div class="flex flex-column justify-center w100 h100">
+  <div class="home vw100 vh100">
+    <div class="transition w100" :class="{ 'home-top-top': isHomeTopTop, 'home-top': isHomeTop, 'home-middle': isHomeMiddle }">
       <div class="brand flex justify-center">
         <div v-for="(text, index) in brand.texts" :key="index" :class="[brand.margin, `cl-${brand.colors[index]}`]">
           {{ text }}
@@ -8,30 +8,26 @@
       </div>
       <div class="search flex flex-column">
         <div class="flex justify-center">
-          <input @input="onSearch" v-model="search.key" type="text" placeholder="Search film...">
+          <input @input="onSearch" @focus="search.isFocus = true" @blur="search.isFocus = false" v-model="search.key" type="text" placeholder="Search film...">
         </div>
-        <div class="flex justify-center">
-          <div class="search-box pt8">
-            <div v-for="(film, index) in search.films" :key="index" class="search-box-item flex justify-space-between align-center p8 hover-bg-n75 br8">
-              <div class="name cl-n800">
-                {{ film.name }}
+        <div v-show="isSearchBox" class="flex justify-center">
+          <div class="search-box mt8">
+            <router-link :to="{ name: 'detail', query: { id: film.id } }" v-for="(film, index) in search.films" :key="index" class="search-box-item flex align-center p8 hover-bg-n75 br8 text-decoration-none">
+              <img class="image mr16" :src="film.banner" alt="">
+              <div>
+                <div class="name cl-n800 mb16">
+                  {{ film.name }}
+                </div>
+                <div class="qualities flex">
+                  <div v-for="(quality, index) in film.qualities" :key="index" class="p4 bg-g200 mr4 cl-white br4">
+                    {{ quality.name }}
+                  </div>
+                </div>
               </div>
-              <div class="list-server flex">
-                <a v-for="(server, index) in film.server" :key="index" @click="setIframe(server.chapters[0].links[0].source, server.name)" class="p4 br4 bg-g200 cl-white ml4 text-decoration-none hover-opacity-8 hover-pointer">
-                  {{ server.name }}
-                </a>
-              </div>
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
-    </div>
-    <div v-if="iframe.source" class="modal">
-      <i @click="removeIframe()" class="modal-close mdi mdi-close-circle mdi-48px cl-g200 hover-opacity-8 hover-pointer"></i>
-      <a :href="iframe.source" target="_blank" class="modal-link p16 bg-g200 br8 cl-white text-decoration-none">
-        {{ iframe.serverName }} <i class="mdi mdi-open-in-new"></i>
-      </a>
-      <iframe :src="iframe.source" frameborder="0" class="w100 h100"></iframe>
     </div>
   </div>
 </template>
@@ -42,7 +38,7 @@ import axios from 'axios'
 export default {
   name: 'Home',
 
-  data() {
+  data () {
     return {
       brand: {
         margin: 'mr8',
@@ -52,6 +48,8 @@ export default {
       search: {
         key: '',
         films: [],
+        isFocus: false,
+        isFetching: false
       },
       iframe: {
         source: '',
@@ -60,19 +58,41 @@ export default {
     }
   },
 
+  computed: {
+    isHomeTopTop () {
+      return this.search.key
+    },
+
+    isHomeTop () {
+      return this.search.isFocus
+    },
+
+    isHomeMiddle () {
+      return !this.search.isFocus
+    },
+
+    isSearchBox () {
+      return this.search.key && !this.search.isFetching
+    }
+  },
+
   methods: {
-    async onSearch() {
+    async onSearch () {
+      this.search.isFetching = true
+
       const data = await axios.get(`http://demo2699475.mockable.io/search?q=${this.search.key}`)
+
+      this.search.isFetching = false
 
       this.search.films = data.data.data.films
     },
 
-    setIframe(source, serverName) {
+    setIframe (source, serverName) {
       this.iframe.source = source
       this.iframe.serverName = serverName
     },
 
-    removeIframe() {
+    removeIframe () {
       this.iframe.source = ''
       this.iframe.serverName = ''
     }
@@ -81,7 +101,25 @@ export default {
 </script>
 
 <style lang="scss">
+#app {
+  overflow-y: hidden;
+}
 .home {
+  .home-top {
+    position: absolute;
+    top: 0;
+    transform: translateY(0);
+  }
+  .home-middle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .home-top-top {
+    position: absolute;
+    top: 0;
+    transform: translateY(-70px);
+  }
   .brand {
     > div {
       font-family: 'ComfortaaBold';
@@ -112,6 +150,13 @@ export default {
     @include res(laptop) {
       width: 50%;
     }
+    img {
+      height: 100px;
+    }
+  }
+  .search-box {
+    height: calc(100vh - 100px);
+    overflow: hidden auto;
   }
 }
 </style>
