@@ -6,11 +6,21 @@
           {{ text }}
         </div>
       </div>
-      <div class="search flex flex-column">
-        <div class="flex justify-center">
-          <input @input="onSearch" @focus="search.isFocus = true" @blur="search.isFocus = false" v-model="search.key" type="text" placeholder="Search film...">
+      <div class="search flex flex-column align-center">
+        <div class="topics flex flex-wrap justify-center font-12px">
+          <div  v-for="(topic, index) in topics.deactives" @click="activeTopic(index)" :key="index" class="bg-o200 cl-white p4 mr4 mb4 br4 hover-bg-o400 hover-pointer">
+            {{ topic.name }}
+          </div>
         </div>
-        <div v-show="isSearchBox" class="flex justify-center">
+        <div class="search-input flex flex-column align-center">
+          <div class="flex flex-wrap justify-center font-12px">
+            <div v-for="(topic, index) in topics.actives" @click="deactiveTopic(index)" :key="index" class="cl-white p4 mt4 mr4 br4 bg-o400 hover-pointer">
+              {{ topic.name }}
+            </div>
+          </div>
+          <input @input="onSearch" @focus="search.isFocus = true" @blur="search.isFocus = false" v-model="search.key" type="text" placeholder="Search film..." class="w100">
+        </div>
+        <div v-show="isSearchBox" class="flex justify-center w100">
           <div class="search-box mt8">
             <router-link :to="{ name: 'detail', query: { id: film.id } }" v-for="(film, index) in search.films" :key="index" class="search-box-item flex align-center p8 hover-bg-n75 br8 text-decoration-none">
               <img class="image mr16" :src="film.banner" alt="">
@@ -54,6 +64,11 @@ export default {
       iframe: {
         source: '',
         serverName: ''
+      },
+      topics: {
+        all: [],
+        deactives: [],
+        actives: []
       }
     }
   },
@@ -73,14 +88,35 @@ export default {
 
     isSearchBox () {
       return this.search.key && !this.search.isFetching
+    },
+
+    topicIds () {
+      return this.topics.actives.map((topic) => topic.id)
     }
   },
 
+  async mounted () {
+    const data = await axios.get('http://demo2699475.mockable.io/filters')
+
+    this.topics.all = data.data.data.topics
+    this.topics.deactives = this.topics.all
+  },
+
   methods: {
+    activeTopic (index) {
+      const actives = this.topics.deactives.splice(index, 1)
+      this.topics.actives.push(actives[0])
+    },
+
+    deactiveTopic (index) {
+      const deactives = this.topics.actives.splice(index, 1)
+      this.topics.deactives.push(deactives[0])
+    },
+
     async onSearch () {
       this.search.isFetching = true
 
-      const data = await axios.get(`http://demo2699475.mockable.io/search?q=${this.search.key}`)
+      const data = await axios.get(`http://demo2699475.mockable.io/search?q=${this.search.key}&filter=${this.topicIds}`)
 
       this.search.isFetching = false
 
@@ -127,21 +163,22 @@ export default {
     font-size: 56px;
     margin-bottom: 16px;
   }
-  input {
-    height: 44px;
+  .search-input {
     border-radius: 22px;
     border: none;
-    background-color: #F1F3F4;
-    color: #80868B;
+    background-color: $N75;
     padding-left: 20px;
-    font-size: 14px;
-    outline: none;
-    &:focus {
-      background-color: white;
-      box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+    input {
+      height: 44px;
+      border: none;
+      color: $N200;
+      background-color: transparent;
+      font-size: 14px;
+      outline: none;
     }
   }
-  input,
+  .topics,
+  .search-input,
   .search-box {
     width: 90%;
     @include res(tablet) {
@@ -155,7 +192,7 @@ export default {
     }
   }
   .search-box {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 150px);
     overflow: hidden auto;
   }
 }
