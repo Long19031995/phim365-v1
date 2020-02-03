@@ -58,6 +58,14 @@
   overflow-y: hidden;
 }
 
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
 $sizes: 0, 4, 8, 12, 16, 20, 24, 28, 32;
 
 @each $size in $sizes {
@@ -74,8 +82,8 @@ $sizes: 0, 4, 8, 12, 16, 20, 24, 28, 32;
   .pb#{$size} {
     padding-bottom: #{$size}px;
   }
-  .brl#{$size} {
-    margin-left: #{$size}px;
+  .pl#{$size} {
+    padding-left: #{$size}px;
   }
 
   // margin

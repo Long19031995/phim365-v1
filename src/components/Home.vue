@@ -16,6 +16,7 @@
                 <div class="flex flex-wrap justify-center font-12px">
                     <div v-for="(topic, index) in topics.actives" @click="deactiveTopic(index)" :key="index" class="cl-white p4 mt4 mr4 br4 bg-o400 hover-pointer">
                         {{ topic.name }}
+                        <i class="mdi mdi-close"></i>
                     </div>
                 </div>
                 <input @input="onSearch" @focus="search.isFocus = true" @blur="search.isFocus = false" v-model="search.key" type="text" placeholder="Search film..." class="w100">
@@ -106,11 +107,13 @@ export default {
         activeTopic(index) {
             const actives = this.topics.deactives.splice(index, 1)
             this.topics.actives.push(actives[0])
+            this.onSearch()
         },
 
         deactiveTopic(index) {
             const deactives = this.topics.actives.splice(index, 1)
             this.topics.deactives.push(deactives[0])
+            this.onSearch()
         },
 
         async onSearch() {
