@@ -1,20 +1,24 @@
 <template>
-<div class="detail">
-    <div class="detail__background">
-        <img :src="detail.poster">
+<div class="detail vh100 overflow-hidden">
+    <div class="detail__background w100 h100">
+        <img :src="detail.poster" class="w100 h100">
     </div>
-    <div class="detail__content flex flex-column align-center pt16 pos-rlt">
-        <router-link :to="{ name: 'home' }" class="p8 bg-g200 cl-white pos-abs t16 l16">
-            <div class="mdi mdi-home mdi-36px"></div>
+    <div class="detail__content flex flex-column align-center pos-rlt vh100 overflow-hidden">
+        <router-link :to="{ name: 'home' }" class="p8 bg-o600 cl-white pos-abs t16 l16 br24">
+            <div class="mdi mdi-home mdi-24px"></div>
         </router-link>
-        <div class="flex w100">
-            <div class="col-md-5 text-right">
+        <div class="flex flex-wrap w100 pt16 overflow-hidden-x">
+            <div class="col-md-2"></div>
+            <div class="col-md-2 text-center">
                 <img :src="detail.banner">
             </div>
-            <div class="col-md-7 pl32">
-                <h2>
+            <div class="col-md-6 pl24 pr24">
+                <h1 class="mb8 mt24">
                     {{ detail.name }}
-                </h2>
+                </h1>
+                <h3 class="mb24">
+                    {{ detail.nameEnglish }}
+                </h3>
                 <!-- <div v-for="(server, index) in detail.server" :key="index" class="flex align-center mb16">
                     <div class="mr16">
                         {{ server.name }}
@@ -25,28 +29,63 @@
                         </a>
                     </div>
                 </div> -->
+
                 <hr class="bg-n600">
-                <div class="pt8 pb8">
+                <div class="pt16 pb16">
+                    <span class="pr8">
+                        {{ detail.releases[0].name }}
+                    </span>
+                    <span v-for="quality in detail.qualities" class="pr8">
+                        {{ quality.name }}
+                    </span>
+                </div>
+
+                <hr class="bg-n600">
+                <div class="pt16 pb16">
+                    <span class="pr8">Thời lượng:</span>
+                    <span>
+                        {{ detail.duration }}
+                    </span>
+                </div>
+
+                <hr class="bg-n600">
+                <div class="pt16 pb16">
                     <span class="pr8">Đạo diễn:</span>
-                    <span v-for="director in detail.directors">
-                        {{ director.name }},
+                    <span v-for="(director, index) in detail.directors">
+                        {{ director.name }}<template v-if="index !== detail.directors.length - 1">, </template>
                     </span>
                 </div>
 
                 <hr class="bg-n600">
-                <div class="pt8 pb8">
+                <div class="pt16 pb16">
                     <span class="pr8">Diễn viên:</span>
-                    <span v-for="cast in detail.casts">
-                        {{ cast.name }},
+                    <span v-for="(cast, index) in detail.casts">
+                        {{ cast.name }}<template v-if="index !== detail.casts.length - 1">, </template>
                     </span>
                 </div>
 
                 <hr class="bg-n600">
-                <div class="pt8 pb8">
+                <div class="pt16 pb16">
                     <span class="pr8">Quốc gia:</span>
-                    <span v-for="nation in detail.nations">
-                        {{ nation.name }},
+                    <span v-for="(nation, index) in detail.nations">
+                        {{ nation.name }}<template v-if="index !== detail.nations.length - 1">, </template>
                     </span>
+                </div>
+
+                <hr class="bg-n600">
+                <div class="pt16 pb16">
+                    <h2 class="pb8">Đánh giá phim:</h2>
+                    <i v-for="rate in 5" class="mdi mdi-star mdi-36px" :class="{ 'cl-y100': rate <= detail.rate }"></i>
+                </div>
+
+                <hr class="bg-n600">
+                <div class="pt16 pb16">
+                    <h2 class="pb8">
+                        Nội dung phim
+                    </h2>
+                    <div>
+                        {{ detail.description }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,14 +122,16 @@ export default {
         z-index: -1;
         background: black;
         img {
-            max-width: 100%;
-            opacity: 0.3;
+            object-fit: cover;
+            object-position: top;
+            opacity: 0.2;
+            filter: blur(5px);
         }
     }
     &__content {
         color: white;
         img {
-            max-width: 320px;
+            max-width: 90%;
             border-radius: 4px;
             box-shadow: 0 0 10px white;
         }

@@ -17,7 +17,7 @@ export default new VueRouter({
     },
     {
       name: 'detail',
-      path: '/detail/:id',
+      path: '/detail',
       component: Detail
     }
   ]
