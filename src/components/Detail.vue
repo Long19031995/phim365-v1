@@ -21,23 +21,6 @@
                 </h3>
 
                 <hr class="bg-n600">
-                <div class="pt16">
-                    <h2 class="pb8">
-                        Server
-                    </h2>
-                    <div v-for="(server, index) in detail.server" :key="index" class="flex align-center mb16">
-                        <div class="mr16">
-                            {{ server.name }}
-                        </div>
-                        <div class="flex">
-                            <a :href="chapter.links[0].source" target="_blank" v-for="(chapter, index) in server.chapters" :key="index" class="text-decoration-none pr12 pl12 mr4 cl-white bg-g200 br4">
-                                {{ chapter.name }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="bg-n600">
                 <div class="pt16 pb16">
                     <span class="pr8">
                         {{ detail.releases[0].name }}
@@ -92,6 +75,23 @@
                     </h2>
                     <div>
                         {{ detail.description }}
+                    </div>
+                </div>
+
+                <hr class="bg-n600">
+                <div class="pt16">
+                    <h2 class="pb8">
+                        Server
+                    </h2>
+                    <div v-for="(server, index) in detail.server" :key="index" class="flex align-center mb16">
+                        <div class="mr16">
+                            {{ server.name }}
+                        </div>
+                        <div class="flex">
+                            <a :href="chapter.links[0].source" target="_blank" v-for="(chapter, index) in server.chapters" :key="index" class="text-decoration-none pr12 pl12 mr4 cl-white bg-g200 br4">
+                                {{ chapter.name }}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
